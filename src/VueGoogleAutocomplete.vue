@@ -1,14 +1,16 @@
 <template>
     <input
         ref="autocomplete"
-        type="text"
+        :type="type"
+        :inputmode="inputmode"
+        :autofocus="autofocus"
         :class="classname"
         :id="id"
         :placeholder="placeholder"
         :disabled="disabled"
         v-model="autocompleteText"
-        @focus="onFocus()"
-        @blur="onBlur()"
+        @focus="onFocus($event)"
+        @blur="onBlur($event)"
         @change="onChange"
         @keypress="onKeyPress"
         @keyup="onKeyUp"
@@ -50,6 +52,21 @@
             type: String,
             required: true
           },
+
+          type: {
+            type: String,
+            default: 'text'
+          }, 
+
+          inputmode: {
+            type: String,
+            default: 'text'
+          }, 
+
+          autofocus: {
+            type: Boolean,
+            default: false
+          }, 
 
           classname: String,
 
@@ -193,16 +210,18 @@
             /**
              * When the input gets focus
              */
-            onFocus() {
+            onFocus(event) {
               this.biasAutocompleteLocation();
-              this.$emit('focus');
+              // Emit the event object to make it available in the handler in the parent component
+              this.$emit('focus', event);
             },
 
             /**
              * When the input loses focus
              */
-            onBlur() {
-              this.$emit('blur');
+            onBlur(event) {
+              // Emit the event object to make it available in the handler in the parent component
+              this.$emit('blur', event);
             },
 
             /**
